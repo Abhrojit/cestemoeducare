@@ -12,4 +12,8 @@
     <string name="menu_email">E-mail Us</string>
     <string name="menu_about">About Us</string>
     <string name="menugroup_communicate">Communicate</string>
+    <string name="recycle_fragment">This is the recycle Fragment</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment - Home Fragment</string>
 </resources>

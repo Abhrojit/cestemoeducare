@@ -1,5 +1,7 @@
 package com.onclavesystems.cestemoeducare;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -78,19 +80,32 @@ public class ADITI extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Fragment fragment = null;
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
             // Handle the home action
+            fragment = new HomeFragment();
         } else if (id == R.id.nav_location) {
-
+            //Handle the location action
+            fragment = new LocationFragment();
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_contact) {
 
         } else if (id == R.id.nav_email) {
 
+        } else {
+            fragment = new HomeFragment();
+        }
+
+        if(fragment != null) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.addToBackStack(null);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
