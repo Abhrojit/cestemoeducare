@@ -24,6 +24,11 @@ public class LocationListAdapter extends RecyclerView.Adapter<LocationListAdapte
         }
     }
 
+    public LocationListAdapter(String[] centerNames, String[] addresses) {
+        this.centerNames = centerNames;
+        this.addresses = addresses;
+    }
+
     @Override
     public LocationListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         CardView cv = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.location_card, parent, false);

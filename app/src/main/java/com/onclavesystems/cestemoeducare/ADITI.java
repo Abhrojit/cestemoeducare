@@ -107,6 +107,9 @@ public class ADITI extends AppCompatActivity
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
         }
+        else {
+            Toast.makeText(getBaseContext(), "Fragment not initiated", Toast.LENGTH_SHORT).show();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
