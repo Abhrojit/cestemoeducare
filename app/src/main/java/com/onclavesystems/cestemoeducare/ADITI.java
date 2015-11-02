@@ -19,6 +19,8 @@ import android.widget.Toast;
 public class ADITI extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    int menuID = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +45,34 @@ public class ADITI extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if(savedInstanceState != null) {
+            menuID = savedInstanceState.getInt("menuID");
+        }
+
+        checkMenuID(menuID);
+    }
+
+    public void checkMenuID(int id) {
+        if(id == 0) {
+            swapFragments(new HomeFragment());
+        }
+        else {
+            onItemForFragmentSelected(menuID);
+        }
+    }
+
+    public void swapFragments(Fragment fragment) {
+        if(fragment != null) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.addToBackStack(null);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
+        }
+        else {
+            Toast.makeText(getBaseContext(), "Fragment not initiated", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -80,9 +110,18 @@ public class ADITI extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Fragment fragment = null;
+
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        menuID = item.getItemId();
+
+        onItemForFragmentSelected(menuID);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public void onItemForFragmentSelected(int id) {
+        Fragment fragment = null;
 
         if (id == R.id.nav_home) {
             // Handle the home action
@@ -91,28 +130,20 @@ public class ADITI extends AppCompatActivity
             //Handle the location action
             fragment = new LocationFragment();
         } else if (id == R.id.nav_about) {
-
+            //Handle the about action here
         } else if (id == R.id.nav_contact) {
-
+            //Handle the contact action here
         } else if (id == R.id.nav_email) {
-
+            //Handle the email action here
         } else {
             fragment = new HomeFragment();
         }
 
-        if(fragment != null) {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment);
-            ft.addToBackStack(null);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.commit();
-        }
-        else {
-            Toast.makeText(getBaseContext(), "Fragment not initiated", Toast.LENGTH_SHORT).show();
-        }
+        swapFragments(fragment);
+    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putInt("menuID", menuID);
     }
 }
