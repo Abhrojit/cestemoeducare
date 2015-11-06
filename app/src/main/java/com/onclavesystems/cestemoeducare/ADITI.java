@@ -14,11 +14,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class ADITI extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private EditText et_name;
     int menuID = 0;
 
     @Override
@@ -71,7 +73,7 @@ public class ADITI extends AppCompatActivity
             ft.commit();
         }
         else {
-            Toast.makeText(getBaseContext(), "Fragment not initiated", Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.drawer_layout),"Fragment not initiated", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -133,6 +135,7 @@ public class ADITI extends AppCompatActivity
             //Handle the about action here
         } else if (id == R.id.nav_contact) {
             //Handle the contact action here
+            fragment = new ContactUsFragment();
         } else if (id == R.id.nav_email) {
             //Handle the email action here
         } else {
@@ -140,6 +143,10 @@ public class ADITI extends AppCompatActivity
         }
 
         swapFragments(fragment);
+    }
+
+    public void onSubmitQuery(View view) {
+        Snackbar.make(view, "Button Clicked", Snackbar.LENGTH_LONG).show();
     }
 
     @Override

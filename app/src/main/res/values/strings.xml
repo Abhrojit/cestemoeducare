@@ -13,6 +13,12 @@
     <string name="menu_about">About Us</string>
     <string name="menugroup_communicate">Communicate</string>
     <string name="recycle_fragment">This is the recycle Fragment</string>
+    <string name="hint_name">FULL NAME</string>
+    <string name="hint_phone">PHONE NUMBER</string>
+    <string name="hint_address">ADDRESS</string>
+    <string name="hint_hear">WHERE DID YOU HEAR ABOUT US</string>
+    <string name="hint_query">YOUR  QUERY</string>
+    <string name="btn_query">SUBMIT QUERY</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment - Home Fragment</string>
