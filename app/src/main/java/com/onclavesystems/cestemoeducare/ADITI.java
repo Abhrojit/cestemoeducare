@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 public class ADITI extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private EditText et_name;
     int menuID = 0;
 
     @Override
@@ -146,7 +146,16 @@ public class ADITI extends AppCompatActivity
     }
 
     public void onSubmitQuery(View view) {
-        Snackbar.make(view, "Button Clicked", Snackbar.LENGTH_LONG).show();
+        ContactUsFragment.CustomTextWatcher watchText = new ContactUsFragment.CustomTextWatcher(view);
+        watchText.context = getBaseContext();
+
+        if(watchText.checkFormData()) {
+            //--sending data to server--
+            Snackbar.make(view, "All validations are correct", Snackbar.LENGTH_LONG).show();
+        }
+        else {
+            Snackbar.make(view, "There was a validation problem with a field", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override

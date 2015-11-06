@@ -19,6 +19,11 @@
     <string name="hint_hear">WHERE DID YOU HEAR ABOUT US</string>
     <string name="hint_query">YOUR  QUERY</string>
     <string name="btn_query">SUBMIT QUERY</string>
+    <string name="err_msg_name">Name cannot be empty</string>
+    <string name="err_msg_phone">Phone Number cannot be empty</string>
+    <string name="err_msg_address">Address cannot be empty</string>
+    <string name="err_msg_query">Query cannot be empty</string>
+    <string name="err_msg_hear">Please tell us where you heard about us!</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment - Home Fragment</string>
