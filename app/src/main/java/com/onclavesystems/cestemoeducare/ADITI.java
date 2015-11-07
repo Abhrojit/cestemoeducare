@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 public class ADITI extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private EditText et_name, et_phoneno, et_address, et_query, et_hear;
     int menuID = 0;
 
     @Override
@@ -138,6 +140,8 @@ public class ADITI extends AppCompatActivity
             fragment = new ContactUsFragment();
         } else if (id == R.id.nav_email) {
             //Handle the email action here
+        } else if(id == R.id.nav_setting) {
+            //Handle the setting action here
         } else {
             fragment = new HomeFragment();
         }
@@ -146,20 +150,77 @@ public class ADITI extends AppCompatActivity
     }
 
     public void onSubmitQuery(View view) {
-        ContactUsFragment.CustomTextWatcher watchText = new ContactUsFragment.CustomTextWatcher(view);
-        watchText.context = getBaseContext();
+        et_name = (EditText)findViewById(R.id.input_name);
+        et_phoneno = (EditText)findViewById(R.id.input_phoneno);
+        et_address = (EditText)findViewById(R.id.input_address);
+        et_query = (EditText)findViewById(R.id.input_query);
+        et_hear = (EditText)findViewById(R.id.input_hear);
 
-        if(watchText.checkFormData()) {
-            //--sending data to server--
-            Snackbar.make(view, "All validations are correct", Snackbar.LENGTH_LONG).show();
+        if(checkFormData()) {
+            Snackbar.make(view, "QUERY SUBMITTED", Snackbar.LENGTH_LONG).show();
+        }
+
+        Snackbar.make(view, "There was a validation problem with a field", Snackbar.LENGTH_LONG).show();
+
+    }
+
+    private boolean checkFormData() {
+        return (validateName() && validatePhone() && validateAddress() && validateQuery() && validateHear());
+    }
+
+    private boolean validateName() {
+        if(TextUtils.isEmpty(et_name.getText().toString().trim())) {
+            et_name.setError(getString(R.string.err_msg_name));
+            return false;
         }
         else {
-            Snackbar.make(view, "There was a validation problem with a field", Snackbar.LENGTH_LONG).show();
+            return true;
+        }
+    }
+
+    private boolean validatePhone() {
+        if(TextUtils.isEmpty(et_phoneno.getText().toString().trim())) {
+            et_name.setError(getString(R.string.err_msg_phone));
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    private boolean validateAddress() {
+        if(TextUtils.isEmpty(et_address.getText().toString().trim())) {
+            et_name.setError(getString(R.string.err_msg_address));
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    private boolean validateQuery() {
+        if(TextUtils.isEmpty(et_query.getText().toString().trim())) {
+            et_name.setError(getString(R.string.err_msg_query));
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    private boolean validateHear() {
+        if(TextUtils.isEmpty(et_hear.getText().toString().trim())) {
+            et_name.setError(getString(R.string.err_msg_hear));
+            return false;
+        }
+        else {
+            return true;
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("menuID", menuID);
     }
 }

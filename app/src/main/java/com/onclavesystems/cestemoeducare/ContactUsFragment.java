@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 /**
@@ -20,14 +22,26 @@ import android.widget.EditText;
 public class ContactUsFragment extends Fragment {
 
     private EditText et_name, et_phoneno, et_address, et_query, et_hear;
-    private TextInputLayout til_name, til_phoneno, til_address, til_query, til_hear;
+    private String name = "", phone = "", address = "", query = "", hear = "";
+    private boolean instanceSaved = false;
 
     public ContactUsFragment() {
         // Required empty public constructor
     }
 
-    public ContactUsFragment getThisClassReference() {
-        return ContactUsFragment.this;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null) {
+            Toast.makeText(getActivity().getBaseContext(), "Not null", Toast.LENGTH_LONG).show();
+            name = savedInstanceState.getString("sv_name");
+            phone = savedInstanceState.getString("sv_phone");
+            address = savedInstanceState.getString("sv_address");
+            query = savedInstanceState.getString("sv_query");
+            hear = savedInstanceState.getString("sv_hear");
+            instanceSaved = savedInstanceState.getBoolean("InstanceSaved");
+        }
     }
 
     @Override
@@ -35,19 +49,38 @@ public class ContactUsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_contact_us, container, false);
-        registerTILs(view);
         registerETs(view);
+
+        if(savedInstanceState != null) {
+            Toast.makeText(getActivity().getBaseContext(), "Not null", Toast.LENGTH_LONG).show();
+            name = savedInstanceState.getString("sv_name");
+            phone = savedInstanceState.getString("sv_phone");
+            address = savedInstanceState.getString("sv_address");
+            query = savedInstanceState.getString("sv_query");
+            hear = savedInstanceState.getString("sv_hear");
+            instanceSaved = savedInstanceState.getBoolean("InstanceSaved");
+        }
+
         registerTextChangeListeners();
+
+        if(instanceSaved) {
+            Toast.makeText(getActivity().getBaseContext(), "Instance was saved", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity().getBaseContext(), name, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity().getBaseContext(), phone, Toast.LENGTH_LONG).show();
+            et_name.setText(name);
+            et_phoneno.setText(phone);
+            et_address.setText(address);
+            et_query.setText(query);
+            et_hear.setText(hear);
+        }
 
         return view;
     }
 
-    public void registerTILs(View view) {
-        til_name = (TextInputLayout)view.findViewById(R.id.input_layout_name);
-        til_phoneno = (TextInputLayout)view.findViewById(R.id.input_layout_phoneno);
-        til_address = (TextInputLayout)view.findViewById(R.id.input_layout_address);
-        til_query = (TextInputLayout)view.findViewById(R.id.input_layout_query);
-        til_hear = (TextInputLayout)view.findViewById(R.id.input_layout_hear);
+    @Override
+    public void onStart() {
+        super.onStart();
+
     }
 
     public void registerETs(View view) {
@@ -66,9 +99,20 @@ public class ContactUsFragment extends Fragment {
         et_hear.addTextChangedListener(new CustomTextWatcher(et_hear));
     }
 
-    public static class CustomTextWatcher implements TextWatcher {
-        public View view;
-        public Context context;
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Toast.makeText(getActivity().getBaseContext(), "saving", Toast.LENGTH_LONG).show();
+        savedInstanceState.putString("sv_name", et_name.getText().toString());
+        savedInstanceState.putString("sv_phone", et_phoneno.getText().toString());
+        savedInstanceState.putString("sv_address", et_address.getText().toString());
+        savedInstanceState.putString("sv_query", et_query.getText().toString());
+        savedInstanceState.putString("sv_hear", et_hear.getText().toString());
+        savedInstanceState.putBoolean("InstanceSaved", true);
+    }
+
+    private class CustomTextWatcher implements TextWatcher {
+        private View view;
 
         public CustomTextWatcher(View view) {
             this.view = view;
@@ -102,62 +146,33 @@ public class ContactUsFragment extends Fragment {
             }
         }
 
-        public boolean checkFormData() {
-            if(validateName() && validatePhone() && validateAddress() && validateQuery() && validateHear()) {
-                return true;
-            }
-            else {
-                return false;
+        private void validateName() {
+            if(TextUtils.isEmpty(((EditText)view.findViewById(R.id.input_name)).getText().toString().trim())) {
+                ((EditText)view.findViewById(R.id.input_name)).setError(getString(R.string.err_msg_name));
             }
         }
 
-        private boolean validateName() {
-            if(((EditText)view.findViewById(R.id.input_name)).getText().toString().trim().isEmpty()) {
-                ((TextInputLayout)view.findViewById(R.id.input_layout_name)).setError(context.getString(R.string.err_msg_name));
-                return false;
-            }
-            else {
-                return true;
+        private void validatePhone() {
+            if(TextUtils.isEmpty(((EditText) view.findViewById(R.id.input_phoneno)).getText().toString().trim())) {
+                ((EditText)view.findViewById(R.id.input_phoneno)).setError(getString(R.string.err_msg_phone));
             }
         }
 
-        private boolean validatePhone() {
-            if(((EditText)view.findViewById(R.id.input_phoneno)).getText().toString().trim().isEmpty()) {
-                ((TextInputLayout)view.findViewById(R.id.input_layout_phoneno)).setError(context.getString(R.string.err_msg_phone));
-                return false;
-            }
-            else {
-                return true;
+        private void validateAddress() {
+            if(TextUtils.isEmpty(((EditText) view.findViewById(R.id.input_address)).getText().toString().trim())) {
+                ((EditText)view.findViewById(R.id.input_address)).setError(getString(R.string.err_msg_address));
             }
         }
 
-        private boolean validateAddress() {
-            if(((EditText)view.findViewById(R.id.input_address)).getText().toString().trim().isEmpty()) {
-                ((TextInputLayout)view.findViewById(R.id.input_layout_address)).setError(context.getString(R.string.err_msg_address));
-                return false;
-            }
-            else {
-                return true;
+        private void validateQuery() {
+            if(TextUtils.isEmpty(((EditText) view.findViewById(R.id.input_query)).getText().toString().trim())) {
+                ((EditText)view.findViewById(R.id.input_query)).setError(getString(R.string.err_msg_query));
             }
         }
 
-        private boolean validateQuery() {
-            if(((EditText)view.findViewById(R.id.input_query)).getText().toString().trim().isEmpty()) {
-                ((TextInputLayout)view.findViewById(R.id.input_layout_query)).setError(context.getString(R.string.err_msg_query));
-                return false;
-            }
-            else {
-                return true;
-            }
-        }
-
-        private boolean validateHear() {
-            if(((EditText)view.findViewById(R.id.input_hear)).getText().toString().trim().isEmpty()) {
-                ((TextInputLayout)view.findViewById(R.id.input_layout_hear)).setError(context.getString(R.string.err_msg_hear));
-                return false;
-            }
-            else {
-                return true;
+        private void validateHear() {
+            if(TextUtils.isEmpty(((EditText) view.findViewById(R.id.input_hear)).getText().toString().trim())) {
+                ((EditText)view.findViewById(R.id.input_hear)).setError(getString(R.string.err_msg_hear));
             }
         }
     }

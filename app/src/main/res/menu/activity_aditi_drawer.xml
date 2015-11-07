@@ -34,4 +34,14 @@
                 android:title="@string/menu_email" />
         </menu>
     </item>
+
+    <item
+        android:title="@string/menugroup_tools">
+        <menu>
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_action_settings"
+                android:title="@string/menu_settings" />
+        </menu>
+    </item>
 </menu>

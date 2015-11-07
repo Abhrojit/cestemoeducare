@@ -12,6 +12,8 @@
     <string name="menu_email">E-mail Us</string>
     <string name="menu_about">About Us</string>
     <string name="menugroup_communicate">Communicate</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menugroup_tools">Tools</string>
     <string name="recycle_fragment">This is the recycle Fragment</string>
     <string name="hint_name">FULL NAME</string>
     <string name="hint_phone">PHONE NUMBER</string>
