@@ -34,7 +34,6 @@ public class ContactUsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState != null) {
-            Toast.makeText(getActivity().getBaseContext(), "Not null", Toast.LENGTH_LONG).show();
             name = savedInstanceState.getString("sv_name");
             phone = savedInstanceState.getString("sv_phone");
             address = savedInstanceState.getString("sv_address");
@@ -51,22 +50,9 @@ public class ContactUsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_contact_us, container, false);
         registerETs(view);
 
-        if(savedInstanceState != null) {
-            Toast.makeText(getActivity().getBaseContext(), "Not null", Toast.LENGTH_LONG).show();
-            name = savedInstanceState.getString("sv_name");
-            phone = savedInstanceState.getString("sv_phone");
-            address = savedInstanceState.getString("sv_address");
-            query = savedInstanceState.getString("sv_query");
-            hear = savedInstanceState.getString("sv_hear");
-            instanceSaved = savedInstanceState.getBoolean("InstanceSaved");
-        }
-
         registerTextChangeListeners();
 
         if(instanceSaved) {
-            Toast.makeText(getActivity().getBaseContext(), "Instance was saved", Toast.LENGTH_LONG).show();
-            Toast.makeText(getActivity().getBaseContext(), name, Toast.LENGTH_LONG).show();
-            Toast.makeText(getActivity().getBaseContext(), phone, Toast.LENGTH_LONG).show();
             et_name.setText(name);
             et_phoneno.setText(phone);
             et_address.setText(address);
@@ -75,12 +61,6 @@ public class ContactUsFragment extends Fragment {
         }
 
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
     }
 
     public void registerETs(View view) {
@@ -102,7 +82,6 @@ public class ContactUsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Toast.makeText(getActivity().getBaseContext(), "saving", Toast.LENGTH_LONG).show();
         savedInstanceState.putString("sv_name", et_name.getText().toString());
         savedInstanceState.putString("sv_phone", et_phoneno.getText().toString());
         savedInstanceState.putString("sv_address", et_address.getText().toString());

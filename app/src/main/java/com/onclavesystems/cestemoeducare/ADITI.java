@@ -59,17 +59,26 @@ public class ADITI extends AppCompatActivity
 
     public void checkMenuID(int id) {
         if(id == 0) {
-            swapFragments(new HomeFragment());
+            swapFragments(new HomeFragment(), "HOME");
         }
         else {
             onItemForFragmentSelected(menuID);
         }
     }
 
-    public void swapFragments(Fragment fragment) {
+    public void swapFragments(Fragment fragment, String TAG) {
+        Fragment savedFragment = null;
         if(fragment != null) {
+            savedFragment = getFragmentManager().findFragmentByTag(TAG);
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment);
+
+            if(savedFragment != null) {
+                ft.replace(R.id.content_frame, savedFragment, TAG);
+            }
+            else {
+                ft.replace(R.id.content_frame, fragment, TAG);
+            }
+
             ft.addToBackStack(null);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
@@ -126,27 +135,32 @@ public class ADITI extends AppCompatActivity
 
     public void onItemForFragmentSelected(int id) {
         Fragment fragment = null;
+        String TAG = "HOME";
 
         if (id == R.id.nav_home) {
             // Handle the home action
+            TAG = "HOME";
             fragment = new HomeFragment();
         } else if (id == R.id.nav_location) {
             //Handle the location action
+            TAG = "LOCATION";
             fragment = new LocationFragment();
         } else if (id == R.id.nav_about) {
             //Handle the about action here
         } else if (id == R.id.nav_contact) {
             //Handle the contact action here
+            TAG = "CONTACT";
             fragment = new ContactUsFragment();
         } else if (id == R.id.nav_email) {
             //Handle the email action here
         } else if(id == R.id.nav_setting) {
             //Handle the setting action here
         } else {
+            TAG = "HOME";
             fragment = new HomeFragment();
         }
 
-        swapFragments(fragment);
+        swapFragments(fragment, TAG);
     }
 
     public void onSubmitQuery(View view) {
@@ -159,9 +173,9 @@ public class ADITI extends AppCompatActivity
         if(checkFormData()) {
             Snackbar.make(view, "QUERY SUBMITTED", Snackbar.LENGTH_LONG).show();
         }
-
-        Snackbar.make(view, "There was a validation problem with a field", Snackbar.LENGTH_LONG).show();
-
+        else {
+            Snackbar.make(view, "There was a validation problem with a field", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private boolean checkFormData() {
