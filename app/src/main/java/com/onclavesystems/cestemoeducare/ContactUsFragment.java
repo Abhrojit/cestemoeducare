@@ -2,9 +2,11 @@ package com.onclavesystems.cestemoeducare;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,7 +22,7 @@ import android.widget.Toast;
 /**
  *
  */
-public class ContactUsFragment extends Fragment {
+public class ContactUsFragment extends Fragment implements View.OnClickListener {
 
     private EditText et_name, et_phoneno, et_address, et_query, et_hear;
     private String name = "", phone = "", address = "", query = "", hear = "";
@@ -48,9 +51,10 @@ public class ContactUsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_contact_us, container, false);
-        registerETs(view);
 
+        registerETs(view);
         registerTextChangeListeners();
+        registerButton(view);
 
         if(instanceSaved) {
             et_name.setText(name);
@@ -79,6 +83,26 @@ public class ContactUsFragment extends Fragment {
         et_hear.addTextChangedListener(new CustomTextWatcher(et_hear));
     }
 
+    public void registerButton(View view) {
+        Button button = (Button)view.findViewById(R.id.btn_submitQuery);
+        button.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.btn_submitQuery:
+                FormValidation validate = new FormValidation();
+
+                if(validate.checkFormData(getActivity().findViewById(R.id.content_frame))) {
+                    Snackbar.make(view, "QUERY SUBMITTED", Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                    Snackbar.make(view, "There was a validation problem with a field", Snackbar.LENGTH_LONG).show();
+                }
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -92,6 +116,7 @@ public class ContactUsFragment extends Fragment {
 
     private class CustomTextWatcher implements TextWatcher {
         private View view;
+        private FormValidation validation = new FormValidation();
 
         public CustomTextWatcher(View view) {
             this.view = view;
@@ -108,50 +133,103 @@ public class ContactUsFragment extends Fragment {
         public void afterTextChanged(Editable editable) {
             switch(view.getId()) {
                 case R.id.input_name:
-                    validateName();
+                    validation.validateName(view);
                     break;
                 case R.id.input_phoneno:
-                    validatePhone();
+                    validation.validatePhone(view);
                     break;
                 case R.id.input_address:
-                    validateAddress();
+                    validation.validateAddress(view);
                     break;
                 case R.id.input_query:
-                    validateQuery();
+                    validation.validateQuery(view);
                     break;
                 case R.id.input_hear:
-                    validateHear();
+                    validation.validateHear(view);
                     break;
             }
         }
+    }
 
-        private void validateName() {
-            if(TextUtils.isEmpty(((EditText)view.findViewById(R.id.input_name)).getText().toString().trim())) {
-                ((EditText)view.findViewById(R.id.input_name)).setError(getString(R.string.err_msg_name));
+    private class FormValidation {
+
+        private boolean checkFormData(View view) {
+
+            return (validateName(view) && validatePhone(view) && validateAddress(view) && validateQuery(view) && validateHear(view));
+        }
+
+        private boolean validateName(View view) {
+            EditText nameText = (EditText)view.findViewById(R.id.input_name);
+
+            if(TextUtils.isEmpty((nameText).getText().toString().trim())) {
+                (nameText).setError(getString(R.string.err_msg_name));
+
+                return false;
+            }
+            else {
+                (nameText).setError(null);
+
+                return true;
             }
         }
 
-        private void validatePhone() {
-            if(TextUtils.isEmpty(((EditText) view.findViewById(R.id.input_phoneno)).getText().toString().trim())) {
-                ((EditText)view.findViewById(R.id.input_phoneno)).setError(getString(R.string.err_msg_phone));
+        private boolean validatePhone(View view) {
+            EditText phoneText = (EditText)view.findViewById(R.id.input_phoneno);
+
+            if(TextUtils.isEmpty((phoneText).getText().toString().trim())) {
+                (phoneText).setError(getString(R.string.err_msg_phone));
+
+                return false;
+            }
+            else {
+                (phoneText).setError(null);
+
+                return true;
             }
         }
 
-        private void validateAddress() {
-            if(TextUtils.isEmpty(((EditText) view.findViewById(R.id.input_address)).getText().toString().trim())) {
-                ((EditText)view.findViewById(R.id.input_address)).setError(getString(R.string.err_msg_address));
+        private boolean validateAddress(View view) {
+            EditText addressText = (EditText)view.findViewById(R.id.input_address);
+
+            if(TextUtils.isEmpty((addressText).getText().toString().trim())) {
+                (addressText).setError(getString(R.string.err_msg_address));
+
+                return false;
+            }
+            else {
+                (addressText).setError(null);
+
+                return true;
             }
         }
 
-        private void validateQuery() {
-            if(TextUtils.isEmpty(((EditText) view.findViewById(R.id.input_query)).getText().toString().trim())) {
-                ((EditText)view.findViewById(R.id.input_query)).setError(getString(R.string.err_msg_query));
+        private boolean validateQuery(View view) {
+            EditText queryText = (EditText)view.findViewById(R.id.input_query);
+
+            if(TextUtils.isEmpty((queryText).getText().toString().trim())) {
+                (queryText).setError(getString(R.string.err_msg_query));
+
+                return false;
+            }
+            else {
+                (queryText).setError(null);
+
+                return true;
             }
         }
 
-        private void validateHear() {
-            if(TextUtils.isEmpty(((EditText) view.findViewById(R.id.input_hear)).getText().toString().trim())) {
-                ((EditText)view.findViewById(R.id.input_hear)).setError(getString(R.string.err_msg_hear));
+        private boolean validateHear(View view) {
+            EditText hearText = (EditText)view.findViewById(R.id.input_hear);
+
+            if(TextUtils.isEmpty((hearText).getText().toString().trim())) {
+                (hearText).setError(getString(R.string.err_msg_hear));
+
+                return false;
+            }
+            else {
+                (hearText).setError(null);
+
+                return true;
             }
         }
     }
