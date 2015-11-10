@@ -67,7 +67,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
         return view;
     }
 
-    public void registerETs(View view) {
+    private void registerETs(View view) {
         et_name = (EditText)view.findViewById(R.id.input_name);
         et_phoneno = (EditText)view.findViewById(R.id.input_phoneno);
         et_address = (EditText)view.findViewById(R.id.input_address);
@@ -75,7 +75,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
         et_hear = (EditText)view.findViewById(R.id.input_hear);
     }
 
-    public void registerTextChangeListeners() {
+    private void registerTextChangeListeners() {
         et_name.addTextChangedListener(new CustomTextWatcher(et_name));
         et_phoneno.addTextChangedListener(new CustomTextWatcher(et_phoneno));
         et_address.addTextChangedListener(new CustomTextWatcher(et_address));
@@ -83,7 +83,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
         et_hear.addTextChangedListener(new CustomTextWatcher(et_hear));
     }
 
-    public void registerButton(View view) {
+    private void registerButton(View view) {
         Button button = (Button)view.findViewById(R.id.btn_submitQuery);
         button.setOnClickListener(this);
     }
