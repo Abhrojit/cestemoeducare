@@ -18,6 +18,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 /**
  *
@@ -175,17 +178,24 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
 
         private boolean validatePhone(View view) {
             EditText phoneText = (EditText)view.findViewById(R.id.input_phoneno);
+            String expression = "^[1-9][0-9]{9}$";
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher((phoneText).getText().toString().trim());
 
             if(TextUtils.isEmpty((phoneText).getText().toString().trim())) {
                 (phoneText).setError(getString(R.string.err_msg_phone));
 
                 return false;
             }
-            else {
-                (phoneText).setError(null);
+            if (!matcher.matches()) {
+                (phoneText).setError(getString(R.string.err_msg_phone1));
 
-                return true;
+                return false;
             }
+
+            (phoneText).setError(null);
+            return true;
+
         }
 
         private boolean validateAddress(View view) {

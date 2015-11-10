@@ -155,6 +155,8 @@ public class ADITI extends AppCompatActivity
             //Handle the email action here
         } else if(id == R.id.nav_setting) {
             //Handle the setting action here
+            TAG = "SETTINGS";
+            fragment = new SettingsFragment();
         } else {
             TAG = "HOME";
             fragment = new HomeFragment();

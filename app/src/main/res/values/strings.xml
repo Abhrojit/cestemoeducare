@@ -23,10 +23,15 @@
     <string name="btn_query">SUBMIT QUERY</string>
     <string name="err_msg_name">Name cannot be empty</string>
     <string name="err_msg_phone">Phone Number cannot be empty</string>
+    <string name="err_msg_phone1">Invalid phone number</string>
     <string name="err_msg_address">Address cannot be empty</string>
     <string name="err_msg_query">Query cannot be empty</string>
     <string name="err_msg_hear">Please tell us where you heard about us!</string>
+    <string name="preference_title">Registration Details</string>
+    <string name="preference_registration_summary">your cyllid registration number</string>
+    <string name="registration_hint">Registration number</string>
+    <string name="forget_registration_number">Forget Associated registration number</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment - Home Fragment</string>
 </resources>
