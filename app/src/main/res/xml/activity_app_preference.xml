@@ -8,8 +8,8 @@
         <EditTextPreference
             android:title="@string/registration_hint"
             android:summary="@string/preference_registration_summary"
-            android:defaultValue="@string/preference_registration_summary"
-            android:key="registrationno" />
+            android:key="registrationno"
+            android:hint="Your cyllid registration number"/>
 
         <Preference
             android:title="@string/forget_registration_number"
