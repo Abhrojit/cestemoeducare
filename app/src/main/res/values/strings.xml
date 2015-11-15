@@ -10,6 +10,7 @@
     <string name="menu_location">Our Locations</string>
     <string name="menu_contact">Contact Us</string>
     <string name="menu_email">E-mail Us</string>
+    <string name="menu_website">Website</string>
     <string name="menu_about">About Us</string>
     <string name="menugroup_communicate">Communicate</string>
     <string name="menu_settings">Settings</string>
@@ -23,14 +24,16 @@
     <string name="btn_query">SUBMIT QUERY</string>
     <string name="err_msg_name">Name cannot be empty</string>
     <string name="err_msg_phone">Phone Number cannot be empty</string>
-    <string name="err_msg_phone1">Invalid phone number</string>
+    <string name="err_wrong_phone">Please enter a valid Phone Number</string>
     <string name="err_msg_address">Address cannot be empty</string>
     <string name="err_msg_query">Query cannot be empty</string>
     <string name="err_msg_hear">Please tell us where you heard about us!</string>
-    <string name="preference_title">Registration Details</string>
-    <string name="preference_registration_summary">your cyllid registration number</string>
-    <string name="registration_hint">Registration number</string>
-    <string name="forget_registration_number">Forget Associated registration number</string>
+    <string name="preference_title">SETTINGS</string>
+    <string name="registration_hint">Registration Number</string>
+    <string name="preference_registration_summary">Cestemo Educare Registration Number</string>
+    <string name="forget_registration_number">FORGET ASSOCIATED ACCOUNT</string>
+    <string name="forget_summary">Tap here to forget the Cestemo Educare account associated with this app.</string>
+    <string name="no_internet_connectivity">Your Phone is not connected to  the Internet.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment - Home Fragment</string>

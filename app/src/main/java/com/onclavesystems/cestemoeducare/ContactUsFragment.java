@@ -178,24 +178,28 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
 
         private boolean validatePhone(View view) {
             EditText phoneText = (EditText)view.findViewById(R.id.input_phoneno);
-            String expression = "^[1-9][0-9]{9}$";
-            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher((phoneText).getText().toString().trim());
 
             if(TextUtils.isEmpty((phoneText).getText().toString().trim())) {
                 (phoneText).setError(getString(R.string.err_msg_phone));
 
                 return false;
             }
-            if (!matcher.matches()) {
-                (phoneText).setError(getString(R.string.err_msg_phone1));
+            else {
+                String expression = "^[1-9][0-9]{9}$";
+                Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher((phoneText).getText().toString().trim());
 
-                return false;
+                if(!matcher.matches()) {
+                    (phoneText).setError(getString(R.string.err_wrong_phone));
+
+                    return false;
+                }
+                else {
+                    (phoneText).setError(null);
+
+                    return true;
+                }
             }
-
-            (phoneText).setError(null);
-            return true;
-
         }
 
         private boolean validateAddress(View view) {

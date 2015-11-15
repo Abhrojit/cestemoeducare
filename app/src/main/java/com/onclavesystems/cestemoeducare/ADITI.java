@@ -2,11 +2,17 @@ package com.onclavesystems.cestemoeducare;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,14 +22,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 public class ADITI extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private EditText et_name, et_phoneno, et_address, et_query, et_hear;
-    int menuID = 0;
+    private int menuID = 0;
+    private PopupWindow pw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +48,8 @@ public class ADITI extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Hint: Try finding me in ADITI.java - Sajib", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                initiatePopUpWindow();
             }
         });
 
@@ -157,6 +169,12 @@ public class ADITI extends AppCompatActivity
             //Handle the setting action here
             TAG = "SETTINGS";
             fragment = new SettingsFragment();
+        } else if(id == R.id.nav_website) {
+            //Handle the website action here
+            if(isInternetOn()) {
+                TAG = "WEBSITE";
+                fragment = new WebsiteFragment();
+            }
         } else {
             TAG = "HOME";
             fragment = new HomeFragment();
@@ -169,5 +187,47 @@ public class ADITI extends AppCompatActivity
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("menuID", menuID);
+    }
+
+    public boolean isInternetOn() {
+        ConnectivityManager cm = (ConnectivityManager)getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+        if(!isConnected) {
+            Snackbar.make(findViewById(R.id.drawer_layout), R.string.no_internet_connectivity, Snackbar.LENGTH_INDEFINITE).show();
+        }
+
+        return isConnected;
+    }
+
+    private void initiatePopUpWindow() {
+        try {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int height = displayMetrics.heightPixels;
+            int width = displayMetrics.widthPixels;
+            LayoutInflater inflater = (LayoutInflater)ADITI.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.email_popup_layout, (ViewGroup) findViewById(R.id.popup_window));
+            pw = new PopupWindow(layout, (int)(0.75 * width), (int)(0.75 * height), true);
+            pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+            Button click = (Button) layout.findViewById(R.id.pop_up_button);
+            final EditText et = (EditText) layout.findViewById(R.id.pop_up_edittext);
+            click.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String s = et.getText().toString();
+                    pw.dismiss();
+
+                    Snackbar.make(findViewById(R.id.drawer_layout), s, Snackbar.LENGTH_LONG).show();
+                }
+            });
+        }
+        catch (Exception e) {
+            Snackbar.make(findViewById(R.id.drawer_layout), "Could not initiate Pop-up", Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

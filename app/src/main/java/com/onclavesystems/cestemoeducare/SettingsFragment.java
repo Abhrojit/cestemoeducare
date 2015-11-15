@@ -1,40 +1,45 @@
 package com.onclavesystems.cestemoeducare;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v7.app.AlertDialog;
+import android.support.design.widget.Snackbar;
+import android.widget.EditText;
 import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends PreferenceFragment {
-
+    private volatile String registrationNumber = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.activity_app_preference);
+        addPreferencesFromResource(R.xml.fragment_app_preference);
         final EditTextPreference pref = (EditTextPreference)findPreference("registrationno");
 
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                SharedPreferences sp = getActivity().getSharedPreferences("hiddenpref", Context.MODE_PRIVATE);
-                Boolean registered = sp.getBoolean("registered", false);
-                if (registered == false) {
-                    pref.setText("");
+                SharedPreferences sp = getActivity().getSharedPreferences("com.onclavesystems.cestemoeducare_preferences", Context.MODE_PRIVATE);
+                registrationNumber = sp.getString("registrationno", "");
+                EditText et = ((EditTextPreference) findPreference("registrationno")).getEditText();
+
+                if (registrationNumber.equals("")) {
+                    et.setText("");
+                } else {
+                    et.setText(registrationNumber);
                 }
 
-                return true;
+                return false;
             }
         });
 
@@ -44,55 +49,56 @@ public class SettingsFragment extends PreferenceFragment {
                 if (!newValue.equals("")) {
                     SharedPreferences appPrefs = getActivity().getSharedPreferences("com.onclavesystems.cestemoeducare_preferences", Context.MODE_PRIVATE);
                     SharedPreferences.Editor prefEd = appPrefs.edit();
-                    prefEd.putString("name", "Abhrojit");
-                    prefEd.commit();
+                    prefEd.putString("name", "Debabrata");
+                    prefEd.putString("registrationno", pref.getText());
+                    prefEd.apply();
 
                     SharedPreferences sp = getActivity().getSharedPreferences("hiddenpref", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putBoolean("registered", true);
-                    editor.commit();
+                    editor.apply();
 
-                    Toast.makeText(getActivity(), "Your registration number is saved", Toast.LENGTH_LONG).show();
+                    if (getView() != null) {
+                        Snackbar.make(getView(), "Your preferences were saved", Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity().getBaseContext(), "Your preferences were Saved", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     return false;
                 }
+
                 return true;
             }
         });
-
 
         Preference button = (Preference) findPreference("forgetRegistrationNumber");
         button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public boolean onPreferenceClick(Preference arg0) {
+            public boolean onPreferenceClick(Preference preference) {
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Forget Registration Number?")
-                        .setMessage("Are you sure you want us to forget your current Registration Number?")
+                        .setTitle("Forget Associated Account")
+                        .setMessage("Are you seure you want to forget Associated Account?")
                         .setNegativeButton("No", null)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
                                 SharedPreferences appPrefs = getActivity().getSharedPreferences("com.onclavesystems.cestemoeducare_preferences", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor prefEd = appPrefs.edit();
                                 prefEd.putString("registrationno", "");
                                 prefEd.putString("name", "");
-                                prefEd.commit();
+                                prefEd.apply();
 
                                 SharedPreferences sp = getActivity().getSharedPreferences("hiddenpref", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sp.edit();
                                 editor.putBoolean("registered", false);
-                                editor.commit();
+                                editor.apply();
 
-                                Toast.makeText(getActivity(), "Registration number removed successfully", Toast.LENGTH_LONG).show();
-
-
+                                registrationNumber = "";
                             }
                         }).create().show();
+
                 return true;
             }
         });
-
-
     }
-
-
 }

@@ -32,6 +32,12 @@
                 android:id="@+id/nav_email"
                 android:icon="@drawable/ic_action_mail_add"
                 android:title="@string/menu_email" />
+
+            <item
+                android:id="@+id/nav_website"
+                android:icon="@drawable/ic_action_web_site"
+                android:title="@string/menu_website" />
+
         </menu>
     </item>
 

@@ -1,0 +1,39 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.onclavesystems.cestemoeducare.WebsiteFragment">
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </WebView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_refresh"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="top|start"
+        android:src="@drawable/ic_action_refresh"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_forward"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|center"
+        android:src="@drawable/ic_action_next_item"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_backward"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|start"
+        android:src="@drawable/ic_action_previous_item"/>
+
+</FrameLayout>
