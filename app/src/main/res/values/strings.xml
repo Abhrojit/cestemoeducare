@@ -34,6 +34,7 @@
     <string name="forget_registration_number">FORGET ASSOCIATED ACCOUNT</string>
     <string name="forget_summary">Tap here to forget the Cestemo Educare account associated with this app.</string>
     <string name="no_internet_connectivity">Your Phone is not connected to  the Internet.</string>
+    <string name="loading">Loading&#8230;</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment - Home Fragment</string>

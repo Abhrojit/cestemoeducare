@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/popup_window">
+    android:id="@+id/popup_window"
+    android:background="@drawable/background">
 
     <EditText
         android:id="@+id/pop_up_edittext"

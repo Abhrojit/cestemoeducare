@@ -210,7 +210,7 @@ public class ADITI extends AppCompatActivity
             int width = displayMetrics.widthPixels;
             LayoutInflater inflater = (LayoutInflater)ADITI.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = inflater.inflate(R.layout.email_popup_layout, (ViewGroup) findViewById(R.id.popup_window));
-            pw = new PopupWindow(layout, (int)(0.75 * width), (int)(0.75 * height), true);
+            pw = new PopupWindow(layout, (int)(1.00 * width), (int)(0.75 * height), true);
             pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
             Button click = (Button) layout.findViewById(R.id.pop_up_button);

@@ -1,8 +1,10 @@
 package com.onclavesystems.cestemoeducare;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.net.Uri;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -10,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
 public class WebsiteFragment extends Fragment {
     protected WebView webview;
-    private ProgressBar progress;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -33,7 +35,6 @@ public class WebsiteFragment extends Fragment {
         webview.setScrollbarFadingEnabled(true);
         webview.getSettings().setSupportZoom(true);
         webview.getSettings().setBuiltInZoomControls(true);
-
 
         if(savedInstanceState == null) {
             webview.loadUrl("http://www.cestemo.com");
@@ -68,8 +69,6 @@ public class WebsiteFragment extends Fragment {
         return view;
     }
 
-
-
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -83,28 +82,36 @@ public class WebsiteFragment extends Fragment {
     }
 
     private class CestemoBrowser extends WebViewClient {
-        ProgressDialog progressDialog;
+        private ProgressDialog progressDialog = null;
+
         @Override
         public  boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);
             return  true;
         }
-        public void onLoadResource (WebView view, String url) {
-            if (progressDialog == null) {
+
+        public void onLoadResource(WebView webView, String url) {
+            if(progressDialog == null) {
                 progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage("Loading...");
+                progressDialog.setMessage(getString(R.string.loading));
                 progressDialog.show();
             }
         }
-        public void onPageFinished(WebView view, String url) {
-            try{
-                if (progressDialog.isShowing()) {
+
+        public void onPageFinished(WebView webView, String url) {
+            try {
+                if(progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-            }catch(Exception exception){
-                exception.printStackTrace();
+            }
+            catch (Exception e) {
+                if(getView() != null) {
+                    Snackbar.make(getView(), "Something went wrong!", Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getActivity().getBaseContext(), "Something went Wrong", Toast.LENGTH_LONG).show();
+                }
             }
         }
-
     }
 }
