@@ -1,14 +1,22 @@
 package com.onclavesystems.cestemoeducare;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -25,7 +33,10 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 public class ADITI extends AppCompatActivity
@@ -49,7 +60,8 @@ public class ADITI extends AppCompatActivity
                 Snackbar.make(view, "Hint: Try finding me in ADITI.java - Sajib", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                initiatePopUpWindow();
+                Intent intent = new Intent(ADITI.this, EmailDialogActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -183,6 +195,42 @@ public class ADITI extends AppCompatActivity
         swapFragments(fragment, TAG);
     }
 
+    public void click_location(View view){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Call?");
+
+        alertDialogBuilder.setPositiveButton("Call", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                try {
+
+
+                    // set the data
+                    String uri = "tel:8017741809";
+                    Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(uri));
+
+                    if ( ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED ) {
+                        startActivity(callIntent);
+                    }
+                }catch(Exception e) {
+                    Toast.makeText(getApplicationContext(),"Your call has failed...", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -202,32 +250,4 @@ public class ADITI extends AppCompatActivity
         return isConnected;
     }
 
-    private void initiatePopUpWindow() {
-        try {
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            int height = displayMetrics.heightPixels;
-            int width = displayMetrics.widthPixels;
-            LayoutInflater inflater = (LayoutInflater)ADITI.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout = inflater.inflate(R.layout.email_popup_layout, (ViewGroup) findViewById(R.id.popup_window));
-            pw = new PopupWindow(layout, (int)(1.00 * width), (int)(0.75 * height), true);
-            pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
-
-            Button click = (Button) layout.findViewById(R.id.pop_up_button);
-            final EditText et = (EditText) layout.findViewById(R.id.pop_up_edittext);
-            click.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    String s = et.getText().toString();
-                    pw.dismiss();
-
-                    Snackbar.make(findViewById(R.id.drawer_layout), s, Snackbar.LENGTH_LONG).show();
-                }
-            });
-        }
-        catch (Exception e) {
-            Snackbar.make(findViewById(R.id.drawer_layout), "Could not initiate Pop-up", Snackbar.LENGTH_SHORT).show();
-        }
-    }
 }
