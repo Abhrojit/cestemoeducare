@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -57,11 +58,19 @@ public class ADITI extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Hint: Try finding me in ADITI.java - Sajib", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                SharedPreferences sp = getSharedPreferences("hiddenpref", Context.MODE_PRIVATE);
+                boolean registered = sp.getBoolean("registered",false);
+                if(registered) {
+                    Intent intent = new Intent(ADITI.this, EmailDialogActivity.class);
+                    startActivity(intent);
 
-                Intent intent = new Intent(ADITI.this, EmailDialogActivity.class);
-                startActivity(intent);
+
+                }else{
+                    Snackbar.make(findViewById(R.id.drawer_layout),"Register your account to send a query", Snackbar.LENGTH_LONG).show();
+                    String TAG = "SETTINGS";
+                    Fragment fragment = new SettingsFragment();
+                    swapFragments(fragment,TAG);
+                }
             }
         });
 
@@ -220,12 +229,7 @@ public class ADITI extends AppCompatActivity
             }
         });
 
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
+        alertDialogBuilder.setNegativeButton("No",null);
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();

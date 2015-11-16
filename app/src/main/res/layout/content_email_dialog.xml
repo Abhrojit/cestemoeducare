@@ -12,6 +12,61 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_email_dialog"
     tools:context="com.onclavesystems.cestemoeducare.EmailDialogActivity"
-    android:background="@drawable/background">
+    android:background="@color/screenBackground">
+
+
+        <LinearLayout
+            android:id="@+id/ll1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name:"/>
+
+            <EditText
+                android:id="@+id/editTextName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll2"
+            android:layout_below="@+id/ll1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textRegistrationno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Regisration no:"/>
+
+            <EditText
+                android:id="@+id/editTextRegistrationno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                />
+
+        </LinearLayout>
+
+        <EditText
+            android:layout_below="@+id/ll2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Your Query"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:scrollbars="vertical"
+            android:singleLine="false"
+            android:gravity="top"/>
+
 
 </RelativeLayout>

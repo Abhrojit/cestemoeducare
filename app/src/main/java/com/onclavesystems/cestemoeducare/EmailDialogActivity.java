@@ -1,5 +1,7 @@
 package com.onclavesystems.cestemoeducare;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 public class EmailDialogActivity extends AppCompatActivity {
 
@@ -31,7 +34,7 @@ public class EmailDialogActivity extends AppCompatActivity {
         if(getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-
+        fillDetails();
         this.setFinishOnTouchOutside(false);
     }
 
@@ -52,6 +55,17 @@ public class EmailDialogActivity extends AppCompatActivity {
         lp.width = (int)(0.95 * width);
         lp.height = (int)(0.90 * height);
         getWindowManager().updateViewLayout(view, lp);
+    }
+
+    public void fillDetails(){
+        SharedPreferences appPrefs = getSharedPreferences("com.onclavesystems.cestemoeducare_preferences", Context.MODE_PRIVATE);
+        String registrationno = appPrefs.getString("registrationno", "");
+        String name = appPrefs.getString("name","");
+        EditText etRegistrationno = (EditText) findViewById(R.id.editTextRegistrationno);
+        etRegistrationno.setText(registrationno);
+
+        EditText etName = (EditText) findViewById(R.id.editTextName);
+        etName.setText(name);
     }
 
 }
