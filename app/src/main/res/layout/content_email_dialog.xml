@@ -12,7 +12,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_email_dialog"
     tools:context="com.onclavesystems.cestemoeducare.EmailDialogActivity"
-    android:background="@color/screenBackground">
+    android:background="@color/colorAccentDark">
 
 
         <LinearLayout

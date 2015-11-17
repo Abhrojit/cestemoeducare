@@ -35,6 +35,9 @@
     <string name="forget_summary">Tap here to forget the Cestemo Educare account associated with this app.</string>
     <string name="no_internet_connectivity">Your Phone is not connected to  the Internet.</string>
     <string name="loading">Loading&#8230;</string>
+    <string name="no_registered_account">You do not have a registered account associated with this app</string>
+    <string name="call_permission_error">App was unable to make the call. Check your system permissions.</string>
+    <string name="content_phone_call">Call this Center</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment - Home Fragment</string>

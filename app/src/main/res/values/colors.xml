@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorHighlight">#B6B6B6</color>
     <color name="screenBackground">#FF1919</color>
+    <color name="colorFlesh">#FFBFB4</color>
+    <color name="colorAccentLight">#FFE1D0</color>
+    <color name="colorAccentDark">#BF1616</color>
+    <color name="colorGreyScale">#E6F1F5</color>
 </resources>

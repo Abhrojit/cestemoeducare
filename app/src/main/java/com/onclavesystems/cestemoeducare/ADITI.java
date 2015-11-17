@@ -60,13 +60,14 @@ public class ADITI extends AppCompatActivity
             public void onClick(View view) {
                 SharedPreferences sp = getSharedPreferences("hiddenpref", Context.MODE_PRIVATE);
                 boolean registered = sp.getBoolean("registered",false);
+
                 if(registered) {
                     Intent intent = new Intent(ADITI.this, EmailDialogActivity.class);
                     startActivity(intent);
 
 
                 }else{
-                    Snackbar.make(findViewById(R.id.drawer_layout),"Register your account to send a query", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, getString(R.string.no_registered_account), Snackbar.LENGTH_LONG).show();
                     String TAG = "SETTINGS";
                     Fragment fragment = new SettingsFragment();
                     swapFragments(fragment,TAG);
@@ -206,30 +207,30 @@ public class ADITI extends AppCompatActivity
 
     public void click_location(View view){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Call?");
+        alertDialogBuilder.setMessage("Contact this center via. phone call?");
 
         alertDialogBuilder.setPositiveButton("Call", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 try {
 
-
-                    // set the data
                     String uri = "tel:8017741809";
                     Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(uri));
 
                     if ( ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED ) {
                         startActivity(callIntent);
+                    }else {
+                        callIntent = new Intent((Intent.ACTION_DIAL), Uri.parse(uri));
+                        startActivity(callIntent);
                     }
                 }catch(Exception e) {
-                    Toast.makeText(getApplicationContext(),"Your call has failed...", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+                    Snackbar.make(findViewById(R.id.content_frame), R.string.call_permission_error, Snackbar.LENGTH_LONG).show();
                 }
 
             }
         });
 
-        alertDialogBuilder.setNegativeButton("No",null);
+        alertDialogBuilder.setNegativeButton("Deny",null);
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
@@ -248,7 +249,7 @@ public class ADITI extends AppCompatActivity
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         if(!isConnected) {
-            Snackbar.make(findViewById(R.id.drawer_layout), R.string.no_internet_connectivity, Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(findViewById(R.id.content_frame), R.string.no_internet_connectivity, Snackbar.LENGTH_INDEFINITE).show();
         }
 
         return isConnected;
