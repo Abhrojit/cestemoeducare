@@ -9,4 +9,6 @@
     <color name="colorAccentLight">#FFE1D0</color>
     <color name="colorAccentDark">#BF1616</color>
     <color name="colorGreyScale">#E6F1F5</color>
+    <color name="splashScreenBackground">#FF1919</color>
+    <color name="white">#FFFFFF</color>
 </resources>

@@ -91,6 +91,7 @@ public class ADITI extends AppCompatActivity
         checkMenuID(menuID);
     }
 
+
     public void checkMenuID(int id) {
         if(id == 0) {
             swapFragments(new HomeFragment(), "HOME");
@@ -135,24 +136,53 @@ public class ADITI extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.aditi, menu);
-        return true;
+        super.onCreateOptionsMenu(menu);
+        CreateMenu(menu);
+        return  true;
+    }
+
+    private void CreateMenu(Menu menu) {
+        menu.add(0, 0, 0, "settings");
+        menu.add(0, 1, 1, "About us");
+        menu.add(0, 2, 2, "exit");
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return MenuChoice(item);
     }
+
+    public boolean MenuChoice(MenuItem item) {
+        switch (item.getItemId()) {
+            case 0:
+                String TAG = "SETTINGS";
+                Fragment fragment = new SettingsFragment();
+                swapFragments(fragment,TAG);
+                return true;
+            case 1:
+                Intent intent = new Intent(getBaseContext(), HomeActivity.class);
+                startActivity(intent);
+                return true;
+
+            case 2:
+                new AlertDialog.Builder(this)
+                        .setTitle("Really Exit?")
+                        .setMessage("Are you sure you want to exit?")
+                        .setNegativeButton("No", null)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                finish();
+                            }
+                        }).create().show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -187,6 +217,8 @@ public class ADITI extends AppCompatActivity
             fragment = new ContactUsFragment();
         } else if (id == R.id.nav_email) {
             //Handle the email action here
+            TAG = "EMAIL";
+            fragment = new EmailFragment();
         } else if(id == R.id.nav_setting) {
             //Handle the setting action here
             TAG = "SETTINGS";

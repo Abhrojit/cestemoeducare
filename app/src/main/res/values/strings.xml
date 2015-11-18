@@ -38,6 +38,19 @@
     <string name="no_registered_account">You do not have a registered account associated with this app</string>
     <string name="call_permission_error">App was unable to make the call. Check your system permissions.</string>
     <string name="content_phone_call">Call this Center</string>
+    <string name="email_from">Your email id</string>
+    <string name="subject">Subject</string>
+    <string name="message">Message</string>
+    <string name="err_msg_mailid">Error in email id</string>
+    <string name="err_msg_subject">Subject cannot be empty</string>
+    <string name="err_msg_message">Message cannot be empty</string>
+    <string name="olly">OLLY</string>
+    <string name="cestemoSoftware">cestemo consumer software</string>
+    <string name="onclaveSystems">Onclave Systems</string>
+    <string name="venture">a cestemo educare venture</string>
+    <string name="developed">developed by</string>
+    <string name="onclave">Onclave Research Labs \u00a9 2015</string>
+    <string name="err_invalid_mail">Invalid mail</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment - Home Fragment</string>

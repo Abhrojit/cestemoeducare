@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.cestemocorporate.onclave.cestemocsi.HomeActivity"
+    android:background="@color/splashScreenBackground">
+
+    <TextView
+        android:id="@+id/annaLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cestemoSoftware"
+        android:text="@string/olly"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:textSize="60sp"/>
+
+    <TextView
+        android:id="@+id/cestemoSoftware"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cestemoSoftware"
+        android:layout_above="@+id/onclaveLogo"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:paddingBottom="30dp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/developed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/developed"
+        android:layout_above="@+id/onclaveLogo"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="1dp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/onclaveLogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/onclaveSystems"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:textSize="35sp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/venture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/venture"
+        android:layout_below="@+id/onclaveLogo"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:paddingBottom="30dp"
+        android:textColor="@color/white"/>
+
+
+    <TextView
+        android:id="@+id/onclave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/onclave"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"/>
+
+</RelativeLayout>

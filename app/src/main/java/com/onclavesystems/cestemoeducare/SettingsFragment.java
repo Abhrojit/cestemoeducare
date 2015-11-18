@@ -77,7 +77,7 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Forget Associated Account")
-                        .setMessage("Are you seure you want to forget Associated Account?")
+                        .setMessage("Are you sure you want to forget Associated Account?")
                         .setNegativeButton("No", null)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
