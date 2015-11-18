@@ -40,12 +40,19 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ADITI extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private EditText et_name, et_phoneno, et_address, et_query, et_hear;
     private int menuID = 0;
-    private PopupWindow pw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +150,7 @@ public class ADITI extends AppCompatActivity
 
     private void CreateMenu(Menu menu) {
         menu.add(0, 0, 0, "settings");
-        menu.add(0, 1, 1, "About us");
+        menu.add(0, 1, 1, "About");
         menu.add(0, 2, 2, "exit");
 
     }

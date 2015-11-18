@@ -51,6 +51,7 @@
     <string name="developed">developed by</string>
     <string name="onclave">Onclave Research Labs \u00a9 2015</string>
     <string name="err_invalid_mail">Invalid mail</string>
+    <string name="url_login">www.ABCD.com</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment - Home Fragment</string>
