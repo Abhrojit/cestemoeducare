@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/input_query"
+                    android:id="@+id/input_querymail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"

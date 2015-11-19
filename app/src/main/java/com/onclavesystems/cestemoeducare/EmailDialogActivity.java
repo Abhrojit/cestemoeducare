@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -65,7 +66,7 @@ public class EmailDialogActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         fillDetails();
-        et_query = (EditText) findViewById(R.id.editTextFrom);
+        et_query = (EditText) findViewById(R.id.input_querymail);
         this.setFinishOnTouchOutside(false);
     }
 
@@ -104,8 +105,7 @@ public class EmailDialogActivity extends AppCompatActivity {
 
         if(validateQuery()) {
             if(isInternetOn()) {
-                query = "Registration No.:" + registrationno + "\nName:" +name + "\nQuery:"+et_query.getText().toString();
-                Snackbar.make(findViewById(R.id.content_frame), query, Snackbar.LENGTH_LONG).show();
+                query = "Registration No.:" + registrationno + "\nName:" +name + "\nQuery:"+ et_query.getText().toString();
                 checkSend();
             }else {
                 Snackbar.make(view, "Error connecting to net", Snackbar.LENGTH_SHORT).show();
@@ -193,6 +193,7 @@ public class EmailDialogActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         password = input.getText().toString();
                         SendMail sendmail = new SendMail(to, from, subject, query, password);
+                        Toast.makeText(getBaseContext(),"hi",Toast.LENGTH_SHORT).show();
                         new SendMailTask().execute(sendmail.createSession());
                     }
                 });
@@ -236,7 +237,7 @@ public class EmailDialogActivity extends AppCompatActivity {
     }
     
     private boolean validateQuery() {
-        EditText query = (EditText) findViewById(R.id.input_query);
+        EditText query = (EditText) findViewById(R.id.input_querymail);
         if (TextUtils.isEmpty((query).getText().toString().trim())) {
             return false;
         } else {
