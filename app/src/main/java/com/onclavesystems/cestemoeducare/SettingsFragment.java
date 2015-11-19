@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends PreferenceFragment {
-    private volatile String registrationNumber = "", emailId = "";
+    private volatile String registrationNumber = "";
     private boolean netCheck = false;
     private String validResponse="";
     private static String login_url = "";
@@ -86,54 +86,6 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        final EditTextPreference prefemail = (EditTextPreference)findPreference("emailid");
-
-        prefemail.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                SharedPreferences sp = getActivity().getSharedPreferences("com.onclavesystems.cestemoeducare_preferences", Context.MODE_PRIVATE);
-                emailId = sp.getString("emailid", "");
-                EditText et = ((EditTextPreference) findPreference("emailid")).getEditText();
-
-                if (emailId.equals("")) {
-                    et.setText("");
-                } else {
-                    et.setText(emailId);
-                }
-
-                return false;
-            }
-        });
-
-        prefemail.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (!newValue.equals("")) {
-
-                    if (getView() != null) {
-                        if(checkvalidemail()) {
-                            SharedPreferences appPrefs = getActivity().getSharedPreferences("com.onclavesystems.cestemoeducare_preferences", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor prefEd = appPrefs.edit();
-                            prefEd.putString("emailid", String.valueOf(prefemail));
-
-                            SharedPreferences sp = getActivity().getSharedPreferences("hiddenpref", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putBoolean("registeredemail", true);
-                            editor.apply();
-                            Snackbar.make(getView(), "your emailId is saved", Snackbar.LENGTH_SHORT).show();
-                        }
-                        else{
-                            prefemail.setText("");
-                            Snackbar.make(getView(), "your emailId is invalid", Snackbar.LENGTH_SHORT).show();
-                        }
-                    }
-                } else {
-                    return false;
-                }
-
-                return true;
-            }
-        });
 
         Preference button = (Preference) findPreference("forgetRegistrationNumber");
         button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -150,13 +102,11 @@ public class SettingsFragment extends PreferenceFragment {
                                 SharedPreferences.Editor prefEd = appPrefs.edit();
                                 prefEd.putString("registrationno", "");
                                 prefEd.putString("name", "");
-                                prefEd.putString("emailid", "");
                                 prefEd.apply();
 
                                 SharedPreferences sp = getActivity().getSharedPreferences("hiddenpref", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sp.edit();
                                 editor.putBoolean("registered", false);
-                                editor.putBoolean("registeredemail", false);
                                 editor.apply();
 
                                 registrationNumber = "";
@@ -223,22 +173,5 @@ public class SettingsFragment extends PreferenceFragment {
         editor.apply();
     }
 
-    public boolean checkvalidemail(){
-        final EditTextPreference prefemail = (EditTextPreference)findPreference("emailid");
-        String expression = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
-                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
-                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher((prefemail).getText().toString().trim());
 
-        if(!matcher.matches()) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
 }

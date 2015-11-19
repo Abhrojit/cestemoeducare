@@ -67,25 +67,12 @@ public class ADITI extends AppCompatActivity
             public void onClick(View view) {
                 SharedPreferences sp = getSharedPreferences("hiddenpref", Context.MODE_PRIVATE);
                 boolean registered = sp.getBoolean("registered",false);
-                boolean registeredemail = sp.getBoolean("registeredemail",false);
-                if(registered && registeredemail) {
+                if(registered) {
                     Intent intent = new Intent(ADITI.this, EmailDialogActivity.class);
                     startActivity(intent);
                 }
-                else if ( registered && ! registeredemail){
-                    Snackbar.make(view, getString(R.string.no_registered_email), Snackbar.LENGTH_LONG).show();
-                    String TAG = "SETTINGS";
-                    Fragment fragment = new SettingsFragment();
-                    swapFragments(fragment,TAG);
-                }
-                else if ( !registered && registeredemail){
-                    Snackbar.make(view, getString(R.string.no_registered_account), Snackbar.LENGTH_LONG).show();
-                    String TAG = "SETTINGS";
-                    Fragment fragment = new SettingsFragment();
-                    swapFragments(fragment,TAG);
-                }
                 else {
-                    Snackbar.make(view, getString(R.string.no_registered_accountandemail), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, getString(R.string.no_registered_account), Snackbar.LENGTH_LONG).show();
                     String TAG = "SETTINGS";
                     Fragment fragment = new SettingsFragment();
                     swapFragments(fragment,TAG);
