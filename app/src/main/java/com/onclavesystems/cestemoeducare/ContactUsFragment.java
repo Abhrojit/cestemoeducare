@@ -1,25 +1,37 @@
 package com.onclavesystems.cestemoeducare;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Transport;
 
 
 /**
@@ -27,9 +39,9 @@ import java.util.regex.Pattern;
  */
 public class ContactUsFragment extends Fragment implements View.OnClickListener {
 
-    private EditText et_name, et_phoneno, et_address, et_query, et_hear;
-    private String name = "", phone = "", address = "", query = "", hear = "";
-    private boolean instanceSaved = false;
+    private EditText et_name, et_phoneno, et_address, et_from, et_query, et_hear;
+    private String name = "", phone = "", address = "", from = "", query = "", hear = "", subject = "Contact Us details", message = "", to="", password = "";
+    private boolean instanceSaved = false, result = false;
 
     public ContactUsFragment() {
         // Required empty public constructor
@@ -43,6 +55,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
             name = savedInstanceState.getString("sv_name");
             phone = savedInstanceState.getString("sv_phone");
             address = savedInstanceState.getString("sv_address");
+            from = savedInstanceState.getString("sv_from");
             query = savedInstanceState.getString("sv_query");
             hear = savedInstanceState.getString("sv_hear");
             instanceSaved = savedInstanceState.getBoolean("InstanceSaved");
@@ -63,6 +76,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
             et_name.setText(name);
             et_phoneno.setText(phone);
             et_address.setText(address);
+            et_from.setText(from);
             et_query.setText(query);
             et_hear.setText(hear);
         }
@@ -74,6 +88,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
         et_name = (EditText)view.findViewById(R.id.input_name);
         et_phoneno = (EditText)view.findViewById(R.id.input_phoneno);
         et_address = (EditText)view.findViewById(R.id.input_address);
+        et_from = (EditText)view.findViewById(R.id.input_mailid);
         et_query = (EditText)view.findViewById(R.id.input_query);
         et_hear = (EditText)view.findViewById(R.id.input_hear);
     }
@@ -82,6 +97,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
         et_name.addTextChangedListener(new CustomTextWatcher(et_name));
         et_phoneno.addTextChangedListener(new CustomTextWatcher(et_phoneno));
         et_address.addTextChangedListener(new CustomTextWatcher(et_address));
+        et_from.addTextChangedListener(new CustomTextWatcher(et_from));
         et_query.addTextChangedListener(new CustomTextWatcher(et_query));
         et_hear.addTextChangedListener(new CustomTextWatcher(et_hear));
     }
@@ -98,7 +114,16 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
                 FormValidation validate = new FormValidation();
 
                 if(validate.checkFormData(getActivity().findViewById(R.id.content_frame))) {
-                    Snackbar.make(view, "QUERY SUBMITTED", Snackbar.LENGTH_LONG).show();
+                    message = ("Name:" + et_name.getText().toString() +
+                            "\nAddress:" + et_address.getText().toString() +
+                            "\nPhone:" + et_phoneno.getText().toString() +
+                            "\nQuery:" + et_query.getText().toString() +
+                            "\nWhere did you hear about us:" + et_hear.getText().toString()) ;
+                    if(isInternetOn()) {
+                        checkSend();
+                    }else {
+                        Snackbar.make(getView(), "Error connecting to net", Snackbar.LENGTH_SHORT).show();
+                    }
                 }
                 else {
                     Snackbar.make(view, "There was a validation problem with a field", Snackbar.LENGTH_LONG).show();
@@ -112,6 +137,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
         savedInstanceState.putString("sv_name", et_name.getText().toString());
         savedInstanceState.putString("sv_phone", et_phoneno.getText().toString());
         savedInstanceState.putString("sv_address", et_address.getText().toString());
+        savedInstanceState.putString("sv_from", et_from.getText().toString());
         savedInstanceState.putString("sv_query", et_query.getText().toString());
         savedInstanceState.putString("sv_hear", et_hear.getText().toString());
         savedInstanceState.putBoolean("InstanceSaved", true);
@@ -144,6 +170,9 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
                 case R.id.input_address:
                     validation.validateAddress(view);
                     break;
+                case R.id.input_mailid:
+                    validation.validateEmailid(view);
+                    break;
                 case R.id.input_query:
                     validation.validateQuery(view);
                     break;
@@ -158,7 +187,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
 
         private boolean checkFormData(View view) {
 
-            return (validateName(view) && validatePhone(view) && validateAddress(view) && validateQuery(view) && validateHear(view));
+            return (validateName(view) && validatePhone(view) && validateAddress(view) && validateEmailid(view) && validateQuery(view) && validateHear(view));
         }
 
         private boolean validateName(View view) {
@@ -217,6 +246,33 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
             }
         }
 
+        private boolean validateEmailid(View view) {
+            EditText mailid = (EditText) view.findViewById(R.id.input_mailid);
+
+            if (TextUtils.isEmpty((mailid).getText().toString().trim())) {
+                (mailid).setError(getString(R.string.err_msg_mailid));
+                return false;
+            }else {
+                String expression = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                        + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                        + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                        + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                        + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                        + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
+                Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher((mailid).getText().toString().trim());
+
+                if(!matcher.matches()) {
+                    (mailid).setError(getString(R.string.err_invalid_mail));
+                    return false;
+                }
+                else {
+                    (mailid).setError(null);
+                    return true;
+                }
+            }
+        }
+
         private boolean validateQuery(View view) {
             EditText queryText = (EditText)view.findViewById(R.id.input_query);
 
@@ -246,5 +302,135 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener 
                 return true;
             }
         }
+    }
+    private class SendMailTask extends AsyncTask<Message, Void, Void> {
+        private ProgressDialog progressDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getActivity(), "Please wait", "Sending mail", true, false);
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+
+        }
+        @Override
+        protected Void doInBackground(Message... messages) {
+            try {
+                Transport.send(messages[0]);
+                result = true;
+            } catch (MessagingException e) {
+                result = false;
+                Log.e("SendMail", e.getMessage(), e);
+            }
+            finally {
+                if(result)
+                    showSnackbar();
+                else
+                    sendByIntent();
+            }
+            return null;
+        }
+    }
+
+    public void checkSend(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+
+        alertDialog.setTitle("Choose");
+
+        alertDialog.setMessage("Do You want to send your mail via intent?");
+
+        alertDialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendByIntent();
+                    }
+                });
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        getPassword();
+                    }
+                });
+
+        alertDialog.show();
+    }
+
+    public void getPassword(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+
+        alertDialog.setTitle("PASSWORD");
+
+        alertDialog.setMessage("Enter your gmail Password");
+        final EditText input = new EditText(getActivity());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setHint("Your gmail password");
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        input.setLayoutParams(lp);
+
+        alertDialog.setView(input);
+
+
+        // Setting Positive "Yes" Button
+        alertDialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        password = input.getText().toString();
+                        SendMail sendmail = new SendMail(to, et_from.getText().toString(), subject, message, password);
+                        new SendMailTask().execute(sendmail.createSession());
+                    }
+                });
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
+    }
+    public void sendByIntent(){
+        Intent email = new Intent(Intent.ACTION_SEND);
+        // prompts email clients only
+        email.setType("message/rfc822");
+        email.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
+        email.putExtra(Intent.EXTRA_SUBJECT, subject);
+        email.putExtra(Intent.EXTRA_TEXT, message);
+        setFieldNull();
+        try {
+            // the user can choose the email client
+            startActivity(Intent.createChooser(email, "Choose an email client from..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Snackbar.make(getView().findViewById(R.id.content_frame), "No email client installed", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    public void showSnackbar(){
+        Snackbar.make(getView().findViewById(R.id.content_frame), "Mail sent successfully", Snackbar.LENGTH_LONG).show();
+        setFieldNull();
+
+    }
+
+    private boolean isInternetOn() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isAvailable() && cm.getActiveNetworkInfo().isConnected()) {
+            return true;
+        } else {
+            return false;
+
+        }
+    }
+
+    private void setFieldNull(){
+        et_name.setText("");
+        et_address.setText("");
+        et_phoneno.setText("");
+        et_from.setText("");
+        et_query.setText("");
+        et_hear.setText("");
     }
 }

@@ -13,6 +13,7 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.net.ConnectivityManager;
@@ -26,13 +27,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends PreferenceFragment {
-    private volatile String registrationNumber = "";
+    private volatile String registrationNumber = "", emailId = "";
     private boolean netCheck = false;
-    private String valid;
+    private String validResponse="";
     private static String login_url = "";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,15 +69,63 @@ public class SettingsFragment extends PreferenceFragment {
                         netCheck = true;
                         login_url = getString(R.string.url_login) + pref.getText();
                         checkData();
-
                         SharedPreferences sp = getActivity().getSharedPreferences("com.onclavesystems.cestemoeducare_preferences", Context.MODE_PRIVATE);
 
                         if (getView() != null) {
-                            Snackbar.make(getView(), sp.getString("name","")+ ",your preferences were saved", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(getView(), sp.getString("name", "") + ",your preferences were saved", Snackbar.LENGTH_SHORT).show();
                         }
-                    }else {
+                    } else {
                         Snackbar.make(getView(), "Error connecting to net", Snackbar.LENGTH_SHORT).show();
                         return false;
+                    }
+                } else {
+                    return false;
+                }
+
+                return true;
+            }
+        });
+
+        final EditTextPreference prefemail = (EditTextPreference)findPreference("emailid");
+
+        prefemail.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                SharedPreferences sp = getActivity().getSharedPreferences("com.onclavesystems.cestemoeducare_preferences", Context.MODE_PRIVATE);
+                emailId = sp.getString("emailid", "");
+                EditText et = ((EditTextPreference) findPreference("emailid")).getEditText();
+
+                if (emailId.equals("")) {
+                    et.setText("");
+                } else {
+                    et.setText(emailId);
+                }
+
+                return false;
+            }
+        });
+
+        prefemail.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (!newValue.equals("")) {
+
+                    if (getView() != null) {
+                        if(checkvalidemail()) {
+                            SharedPreferences appPrefs = getActivity().getSharedPreferences("com.onclavesystems.cestemoeducare_preferences", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor prefEd = appPrefs.edit();
+                            prefEd.putString("emailid", String.valueOf(prefemail));
+
+                            SharedPreferences sp = getActivity().getSharedPreferences("hiddenpref", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.putBoolean("registeredemail", true);
+                            editor.apply();
+                            Snackbar.make(getView(), "your emailId is saved", Snackbar.LENGTH_SHORT).show();
+                        }
+                        else{
+                            prefemail.setText("");
+                            Snackbar.make(getView(), "your emailId is invalid", Snackbar.LENGTH_SHORT).show();
+                        }
                     }
                 } else {
                     return false;
@@ -98,11 +150,13 @@ public class SettingsFragment extends PreferenceFragment {
                                 SharedPreferences.Editor prefEd = appPrefs.edit();
                                 prefEd.putString("registrationno", "");
                                 prefEd.putString("name", "");
+                                prefEd.putString("emailid", "");
                                 prefEd.apply();
 
                                 SharedPreferences sp = getActivity().getSharedPreferences("hiddenpref", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sp.edit();
                                 editor.putBoolean("registered", false);
+                                editor.putBoolean("registeredemail", false);
                                 editor.apply();
 
                                 registrationNumber = "";
@@ -130,21 +184,21 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    valid = response.getString("response");
+                    validResponse = response.getString("response");
                 }
                 catch(JSONException e) {
                     Snackbar.make(getView(), "Error in response", Snackbar.LENGTH_SHORT).show();
                 }
                 try{
                     String name = response.getString("name");
-                    boolean success = response.getBoolean("name");
+                    boolean success = response.getBoolean("success");
                     if(success){
                         setData(name);
                     }else{
-                        Snackbar.make(getView(), valid, Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), validResponse, Snackbar.LENGTH_SHORT).show();
                     }
                 }catch(JSONException e){
-                    Snackbar.make(getView(), valid, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), validResponse, Snackbar.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -167,5 +221,24 @@ public class SettingsFragment extends PreferenceFragment {
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("registered", true);
         editor.apply();
+    }
+
+    public boolean checkvalidemail(){
+        final EditTextPreference prefemail = (EditTextPreference)findPreference("emailid");
+        String expression = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher((prefemail).getText().toString().trim());
+
+        if(!matcher.matches()) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }

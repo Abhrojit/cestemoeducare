@@ -11,6 +11,12 @@
             android:key="registrationno"
             android:hint="Your cyllid registration number"/>
 
+        <EditTextPreference
+            android:title="@string/emailid_hint"
+            android:summary="@string/preference_emailid_summary"
+            android:key="emailid"
+            android:hint="Register your email id"/>
+
         <Preference
             android:title="@string/forget_registration_number"
             android:key="forgetRegistrationNumber"

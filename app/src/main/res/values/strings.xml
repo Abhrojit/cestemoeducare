@@ -30,7 +30,9 @@
     <string name="err_msg_hear">Please tell us where you heard about us!</string>
     <string name="preference_title">SETTINGS</string>
     <string name="registration_hint">Registration Number</string>
+    <string name="emailid_hint">Email id</string>
     <string name="preference_registration_summary">Cestemo Educare Registration Number</string>
+    <string name="preference_emailid_summary">Register your email id</string>
     <string name="forget_registration_number">FORGET ASSOCIATED ACCOUNT</string>
     <string name="forget_summary">Tap here to forget the Cestemo Educare account associated with this app.</string>
     <string name="no_internet_connectivity">Your Phone is not connected to  the Internet.</string>
@@ -56,4 +58,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment - Home Fragment</string>
     <string name="title_activity_email_dialog">Members\' Only Area</string>
+    <string name="no_registered_email">Please register your email id to continue</string>
+    <string name="no_registered_accountandemail">please reigster your registration number and emailid</string>
 </resources>
